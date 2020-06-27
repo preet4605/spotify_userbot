@@ -4,13 +4,15 @@
 ## Available commands
 `?ping:` to check the ping.
 
-`?status:` to check the status.
+`?alive:` to check the status.
 
 `?bio:` to check bio.
 
 `?song:` to share the song's link which you're listening to on Spotify.
 
 `?getsong:` to get current playing song's file(mp3).
+
+`?recently:` to get the Current User's Recently Played Tracks. [MAX 20]
 
 `?restart:` to restart the bot.
 
@@ -24,7 +26,7 @@ If you follow this steps, you can use this project easily for yourself.
 
 -  Get your telegram app api_id and api_hash from `my.telegram.org`. 
 
--  Click [here](https://accounts.spotify.com/authorize?client_id=CLIENT_ID&response_type=code&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=user-read-playback-state%20user-read-currently-playing) (change CLIENT_ID to you client_id).
+-  Click [here](https://accounts.spotify.com/authorize?client_id=CLIENT_ID&response_type=code&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&scope=user-read-playback-state%20user-read-currently-playing+user-follow-read+user-read-recently-played+user-top-read+playlist-read-private+playlist-modify-private+user-follow-modify) (change CLIENT_ID to you client_id).
 
 -  After you grant permission, you get redirected to `https://example.com/callback?code=_`. Copy everything after the code, this is you initial token.
 
