@@ -1,2 +1,5 @@
 telethon
 requests
+speedtest-cli
+PyLyrics
+asyncurban

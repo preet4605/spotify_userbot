@@ -1,10 +1,15 @@
 import asyncio
 import time
+import readable_time
 from datetime import datetime
 from constants import API_HASH, API_ID, SESSION_KEY, CLIENT_ID, CLIENT_SECRET, LOG, CMD_PREFIX, BIOS, LIMIT
 import json
 import logging
 import requests
+from importlib import import_module
+import os
+from telethon import events
+from telethon.tl import functions
 from telethon import TelegramClient, events
 from telethon.errors import FloodWaitError, AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -176,6 +181,7 @@ async def work():
 			skip = True
 		# 502 means bad gateway, its an issue on spotify site which we can do nothing about. 30 seconds wait shouldn't
 		# put too much pressure on the spotify server, so we are just going to notify the user once
+		
 		elif r.status_code == 502:
 			if save_spam("spotify", True):
 				string = f"**[WARNING]**\n\nSpotify returned a Bad gateway, which means they have a problem on their " \
@@ -293,38 +299,30 @@ async def work():
 		if not skip:
 			await asyncio.sleep(30)
 
-#------------------------------------------------PLUGINS--------------------------------------------------------#
 
-@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "song"))
-async def link_handler(event):
-	oauth = {
-			"Authorization": "Bearer " + database.return_token()}
-	r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=oauth)
-	if r.status_code == 204:
-		spolink = "\n**I'm not playing anything right now :)**"
-	else:
-		spolink = f"""
-🎶Playing: [{work.title}]({work.link}) - {work.interpret}
- """
-	await event.edit(spolink,link_preview=True)
+# =========================== LOAD PLUGINS ============================================#     
 
-        
-#-------------------------------------------?getsong---------------------------------------------------------#  
-@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "help"))
-async def help(event):
-    CMD = CMD_PREFIX[1:]
-    help_panel = f"""
-**Currently available commands**
-`{CMD}ping`: to check the ping.
-`{CMD}status:` to check the status.
-`{CMD}bio`: to check bio.
-`{CMD}song`: to share the song's link which you're listening to on Spotify.
-`{CMD}getsong`: to get current playing song's file(mp3).
-`{CMD}restart`: to restart the bot.
-    """
-    await event.edit(help_panel,link_preview=True)
+general = ('ud','info','help')
+for plugin in general:
+    import_module('plugins.general.{}'.format(plugin))
 
-#------------------------------------------------------------time_readable_funtion-------------------------------------
+
+spotify = ('lyrics','initial_bio')
+for plugin in spotify:
+    import_module('plugins.spotify.{}'.format(plugin))
+
+chat = ('admin','purge','get_id')
+for plugin in chat:
+    import_module('plugins.chat.{}'.format(plugin))
+    
+system = ('ping','speedtest')
+for plugin in system:
+    import_module('plugins.system.{}'.format(plugin))
+    
+
+
+     
+#===========================================GET_SONG=========================================================#       
 
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "getsong"))
 async def get_song(event):
@@ -332,7 +330,7 @@ async def get_song(event):
 			"Authorization": "Bearer " + database.return_token()}
 	r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=oauth)
 	if r.status_code == 204:
-		spolink = await event.edit("\n**I'm not playing anything right now :)**")
+		spolink = await event.edit("\n**I'm not listening anything right now :)**")
 	else:
 		spolink = f"""{work.link}"""
 		spotify_link = spolink[31:]
@@ -354,76 +352,118 @@ async def get_song(event):
 				if song.audio:
 					await done.delete()
 					await event.client.send_message(event.chat_id, file=song.audio)
+						
 					
 			except Exception as e:
 				await event.reply(f"`RIP `: {str(e)}")
 			return 
-#---------------------------------------------------------------?ping--------------------------------------------
 
-@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "ping"))
-async def ping(event):
-	start = datetime.now()
-	await event.edit("pong!!")
-	end = datetime.now()
-	ms = (end - start).microseconds / 1000
-	ping = f"**Pong\n{ms}**"
-	await event.edit(ping)
+#==============================================SONG==========================================================#
 
-#------------------------------------------------------------time_readable_funtion-------------------------------------
-
-def get_readable_time(seconds: int) -> str:
-	count = 0
-	ping_time = ""
-	time_list = []
-	time_suffix_list = ["s", "m", "h", "days"]
-
-	while count < 4:
-		count += 1
-		if count < 3:
-			remainder, result = divmod(seconds, 60)
-		else:
-			remainder, result = divmod(seconds, 24)
-		if seconds == 0 and remainder == 0:
-			break
-		time_list.append(int(result))
-		seconds = int(remainder)
-
-	for x in range(len(time_list)):
-		time_list[x] = str(time_list[x]) + time_suffix_list[x]
-	if len(time_list) == 4:
-		ping_time += time_list.pop() + ", "
-
-	time_list.reverse()
-	ping_time += ":".join(time_list)
-
-	return ping_time
-
-#-----------------------------------------------------?alive----------------------------------------------------
-
-@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "status"))
-async def alive(event):  
-	uptime = get_readable_time((time.time() - StartTime))
-	alive_b = f"**Yes, Bot is running perfectly!**"
-	alive_b += f"**\nBot uptime:**  {uptime}"
+@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "song"))
+async def link_handler(event):
 	oauth = {
 			"Authorization": "Bearer " + database.return_token()}
 	r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=oauth)
 	if r.status_code == 204:
-		alive_b += "\n**I'm not playing anything right now :)**"
+		spolink = "\n**I'm not listening anything right now :)**"
 	else:
-		
-		spotify_link = work.link
-		spotify_link = spotify_link[31:]
-		lrt = get_readable_time((time.time() - work.lrt))
-		alive_b += f"\n**Last refresh:** {lrt} ago"
-		alive_b += f"\n**Current playing song:** {work.title} - {work.interpret}"
-		alive_b += f"\n**Spotify track id:** `{spotify_link}`"
-		alive_b += f"\n**Duration:** {work.progress}/{work.duration}"
-		
-	await event.edit(alive_b)
+		spolink = f"""
+🎶listening: [{work.title}]({work.link}) - {work.interpret}
+ """
+	await event.edit(spolink,link_preview=True)
 
-#-----------------------------------------------------------?bio--------------------------------------------------   
-  
+#==============================================ALIVE============================================================#
+@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "alive"))
+async def alive(event):
+    uptime = readable_time.get_readable_time((time.time() - StartTime))
+    status_pn = f"**Yes, Bot is running perfectly!** \
+        		   **\nBot uptime:**  {uptime} "
+    
+    #=====================================GET_204=====================================================#
+    oauth = {
+			"Authorization": "Bearer " + database.return_token()}
+    getplay = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=oauth)
+    
+    #=====================================GET_DEVICE_INFO==============================================#
+    device = requests.get('https://api.spotify.com/v1/me/player/devices', headers=oauth )
+    
+    #=====================================GET_FIVE_RECETLY_PLAYED_SONGS=================================#
+    oauth = {
+			"Authorization": "Bearer " + database.return_token()}
+    recetly_pl = requests.get('https://api.spotify.com/v1/me/player/recently-played?type=track&limit=5', headers=oauth)
+    if getplay.status_code == 204:
+        status_pn += "\n**I'm not listening anything right now :)**"
+    else:
+	#==========START_RECETLY_FIVE_SONGS_EXTRATIONS============================================================#
+    	recent_play = recetly_pl.json()
+    	get_rec = recent_play['items']
+    	for for_rec in get_rec:
+        	track = for_rec['track']
+        	get_name = track['name']
+        	sf = open("status_recent_played_song.txt", "a")
+        	sf.write('• __' + get_name +'__' + "\n")
+        	sf.close()
+    	f = open("status_recent_played_song.txt", "r+")
+    	recent_p = f.read()
+    	f.truncate(0)
+		
+    	device_info = device.json()
+    	g_dlist = device_info["devices"][0]
+    	device_name = g_dlist['name']
+    	device_type = g_dlist['type']
+    	device_vol = g_dlist['volume_percent']
+    
+    #==================PLAYING_SONGS_INFO=======================================#
+    	currently_playing_song = f"{work.title} - {work.interpret}"
+    	currently_playing_song_dur = f"{work.progress}/{work.duration}"
+    
+    #==================ASSINGING_VAR_VLAUE=======================================#
+    	status_pn += f"""
+**Device name:** {device_name} ({device_type}) 
+**Device volume:** {device_vol}% 
+**Currently playing song:** {currently_playing_song} 
+**Duration:** {currently_playing_song_dur} 
+**Recently played songs:** \n{recent_p}"""
+                
+    await event.edit(status_pn)
+    
+#===============================================ME==================================#
+@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "me"))
+async def sme(event):
+    oauth = {
+			"Authorization": "Bearer " + database.return_token()}
+    me = requests.get('https://api.spotify.com/v1/me', headers=oauth)
+    a_me = me.json()
+    name = a_me['display_name']
+    me_img = a_me['images'][0]['url']
+    me_url = a_me['external_urls']['spotify']
+    await event.edit(f"**Spotify name**: [{name}]({me_img})\n**Profile link:** [here]({me_url})",link_preview=True)
+
+#=================================RECENT===============================================# 
+@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "recent"))
+async def recent(event):
+    oauth = {
+			"Authorization": "Bearer " + database.return_token()}
+    r = requests.get('https://api.spotify.com/v1/me/player/recently-played', headers=oauth)
+    recent_play = r.json()
+    get_rec = recent_play['items']
+    for for_rec in get_rec:
+        track = for_rec['track']
+        get_name = track['name']
+        ex_link = track['external_urls']
+        get_link = ex_link['spotify']
+        f = open("recent_played_song.txt", "a")
+        f.write('• [' + get_name + ']'+ '(' + get_link + ')'+ "\n")
+        f.close()
+    await event.edit("`Getting recent played songs...`")
+    f = open("recent_played_song.txt", "r+")
+    recent = f.read()
+    f.truncate(0) 
+    await event.edit("**Recently played songs:**\n" + recent,link_preview=False)
+    
+#===========================================BIO===============================================#   
+ 
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "bio"))
 async def bio_handler(event):
 	me = await client.get_me()
@@ -438,14 +478,16 @@ async def bio_handler(event):
 		bio_mode = "`Initial`"
 	else:
 		bio_mode = "`Spotify`"
-		lrt = get_readable_time((time.time() - work.lrt))
+		lrt = readable_time.get_readable_time((time.time() - work.lrt))
 		bio_s += f"\n**Last refresh:** {lrt} ago"
-	bio_s += f"\n**Currently in {bio_mode} mode.**"
+		bio_s += f"\n**Currently in {bio_mode} mode.**"
 	await event.edit(bio_s)
 
 # little message that the bot was started
 async def startup():
 	await client.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
+	
+
 
 
 # shutdown handler in case the bot goes nuts (again)
@@ -466,3 +508,4 @@ loop = asyncio.get_event_loop()
 loop.create_task(work())
 loop.create_task(startup())
 client.run_until_disconnected()
+
