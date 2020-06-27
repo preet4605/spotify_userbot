@@ -2,7 +2,7 @@ import asyncio
 import time
 import readable_time
 from datetime import datetime
-from constants import API_HASH, API_ID, SESSION_KEY, CLIENT_ID, CLIENT_SECRET, LOG, CMD_PREFIX, BIOS, LIMIT
+from constants import API_HASH, API_ID, SESSION_KEY, CLIENT_ID, CLIENT_SECRET, LOG, CMD_PREFIX, BIOS, LIMIT, BOT_TOKEN
 import json
 import logging
 import requests
@@ -22,6 +22,9 @@ system_version, app_version = version, version
 
 StartTime = time.time()
 
+
+
+bot = TelegramClient('bot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
 with TelegramClient(StringSession(SESSION_KEY), API_ID, API_HASH, device_model=device_model,
 					system_version=system_version, app_version=app_version) as client:
@@ -140,20 +143,20 @@ async def work():
 				if save_spam("spotify", False):
 					stringy = "**[INFO]**\n\nEverything returned back to normal, the previous spotify issue has been " \
 							  "resolved."
-					await client.send_message(LOG, stringy)
+					await bot.send_message(LOG, stringy)
 				   
 			else:
 				if save_spam("spotify", True):
 					# currently item is not passed when the user plays a podcast
 					string = f"**[INFO]**\n\nThe playback {received['currently_playing_type']} didn't gave me any " \
 						f"additional information, so I skipped updating the bio."
-					await client.send_message(LOG, string)
+					await bot.send_message(LOG, string)
 	   
 		# 429 means flood limit, we need to wait
 		elif r.status_code == 429:
 			to_wait = r.headers['Retry-After']
 			logger.error(f"Spotify, have to wait for {str(to_wait)}")
-			await client.send_message(LOG, f'**[WARNING]**\n\nI caught a spotify api limit. I shall sleep for '
+			await bot.send_message(LOG, f'**[WARNING]**\n\nI caught a spotify api limit. I shall sleep for '
 										   f'{str(to_wait)} seconds until I refresh again')
 			skip = True
 			await asyncio.sleep(int(to_wait))
@@ -162,7 +165,7 @@ async def work():
 			if save_spam("spotify", False):
 				stringy = "**[INFO]**\n\nEverything returned back to normal, the previous spotify issue has been " \
 						  "resolved."
-				await client.send_message(LOG, stringy)
+				await bot.send_message(LOG, stringy)
 			pass
 		# 401 means our access token is expired, so we need to refresh it
 		elif r.status_code == 401:
@@ -186,7 +189,7 @@ async def work():
 			if save_spam("spotify", True):
 				string = f"**[WARNING]**\n\nSpotify returned a Bad gateway, which means they have a problem on their " \
 					f"servers. The bot will continue to run but may not update the bio for a short time."
-				await client.send_message(LOG, string)
+				await bot.send_message(LOG, string)
 		# 503 means service unavailable, its an issue on spotify site which we can do nothing about. 30 seconds wait
 		# shouldn't put too much pressure on the spotify server, so we are just going to notify the user once
 		elif r.status_code == 503:
@@ -194,16 +197,16 @@ async def work():
 				string = f"**[WARNING]**\n\nSpotify said that the service is unavailable, which means they have a " \
 						 f"problem on their servers. The bot will continue to run but may not update the bio for a " \
 						 f"short time."
-				await client.send_message(LOG, string)
+				await bot.send_message(LOG, string)
 		# 404 is a spotify error which isn't supposed to happen (since our URL is correct). Track the issue here:
 		# https://github.com/spotify/web-api/issues/1280
 		elif r.status_code == 404:
 			if save_spam("spotify", True):
 				string = f"**[INFO]**\n\nSpotify returned a 404 error, which is a bug on their side."
-				await client.send_message(LOG, string)
+				await bot.send_message(LOG, string)
 		# catch anything else
 		else:
-			await client.send_message(LOG, '**[ERROR]**\n\nOK, so something went reeeally wrong with spotify. The bot '
+			await bot.send_message(LOG, '**[ERROR]**\n\nOK, so something went reeeally wrong with spotify. The bot '
 										   'was stopped.\nStatus code: ' + str(r.status_code) + '\n\nText: ' + r.text)
 			logger.error(f"Spotify, error {str(r.status_code)}, text: {r.text}")
 			# stop the whole program since I dont know what happens here and this is the safest thing we can do
@@ -254,7 +257,7 @@ async def work():
 							if save_spam("telegram", False):
 								stringy = "**[INFO]**\n\nEverything returned back to normal, the previous telegram " \
 										  "issue has been resolved."
-								await client.send_message(LOG, stringy)
+								await bot.send_message(LOG, stringy)
 						# this can happen if our LIMIT check failed because telegram counts emojis twice and python
 						# doesnt. Refer to the constants file to learn more about this
 						except AboutTooLongError:
@@ -262,19 +265,19 @@ async def work():
 								stringy = f'**[WARNING]**\n\nThe biography I tried to insert was too long. In order ' \
 									f'to not let that happen again in the future, please read the part about OFFSET ' \
 									f'in the constants. Anyway, here is the bio I tried to insert:\n\n{new_bio}'
-								await client.send_message(LOG, stringy)
+								await bot.send_message(LOG, stringy)
 				# if we dont have a bio, everything was too long, so we tell the user that
 				if not new_bio:
 					if save_spam("telegram", True):
 						to_send = f"**[INFO]**\n\nThe current track exceeded the character limit, so the bio wasn't " \
 							f"updated.\n\n Track: {title}\nInterpret: {interpret}"
-						await client.send_message(LOG, to_send)
+						await bot.send_message(LOG, to_send)
 			# not to_insert means no playback
 			else:
 				if save_spam("telegram", False):
 					stringy = "**[INFO]**\n\nEverything returned back to normal, the previous telegram issue has " \
 							  "been resolved."
-					await client.send_message(LOG, stringy)
+					await bot.send_message(LOG, stringy)
 				old_bio = database.return_bio()
 				# this means the bio is blank, so we save that as the new one
 				if not bio:
@@ -282,6 +285,7 @@ async def work():
 				# this means an old playback is in the bio, so we change it back to the original one
 				elif "🎶" in bio:
 					await client(UpdateProfileRequest(about=database.return_bio()))
+					await bot(UpdateProfileRequest(about=database.return_bio()))
 				# this means a new original is there, lets save it
 				elif not bio == old_bio:
 					database.save_bio(bio)
@@ -291,7 +295,7 @@ async def work():
 		except FloodWaitError as e:
 			to_wait = e.seconds
 			logger.error(f"to wait for {str(to_wait)}")
-			await client.send_message(LOG, f'**[WARNING]**\n\nI caught a telegram api limit. I shall sleep '
+			await bot.send_message(LOG, f'**[WARNING]**\n\nI caught a telegram api limit. I shall sleep '
 										   f'{str(to_wait)} seconds until I refresh again')
 			skip = True
 			await asyncio.sleep(int(to_wait))
@@ -319,10 +323,6 @@ system = ('ping','speedtest')
 for plugin in system:
     import_module('plugins.system.{}'.format(plugin))
     
-
-
-     
-#===========================================GET_SONG=========================================================#       
 
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "getsong"))
 async def get_song(event):
@@ -358,8 +358,6 @@ async def get_song(event):
 				await event.reply(f"`RIP `: {str(e)}")
 			return 
 
-#==============================================SONG==========================================================#
-
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "song"))
 async def link_handler(event):
 	oauth = {
@@ -373,7 +371,7 @@ async def link_handler(event):
  """
 	await event.edit(spolink,link_preview=True)
 
-#==============================================ALIVE============================================================#
+
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "alive"))
 async def alive(event):
     uptime = readable_time.get_readable_time((time.time() - StartTime))
@@ -428,7 +426,7 @@ async def alive(event):
                 
     await event.edit(status_pn)
     
-#===============================================ME==================================#
+
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "me"))
 async def sme(event):
     oauth = {
@@ -436,11 +434,12 @@ async def sme(event):
     me = requests.get('https://api.spotify.com/v1/me', headers=oauth)
     a_me = me.json()
     name = a_me['display_name']
+    #country = a_me['country']
     me_img = a_me['images'][0]['url']
     me_url = a_me['external_urls']['spotify']
     await event.edit(f"**Spotify name**: [{name}]({me_img})\n**Profile link:** [here]({me_url})",link_preview=True)
 
-#=================================RECENT===============================================# 
+   
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "recent"))
 async def recent(event):
     oauth = {
@@ -462,8 +461,6 @@ async def recent(event):
     f.truncate(0) 
     await event.edit("**Recently played songs:**\n" + recent,link_preview=False)
     
-#===========================================BIO===============================================#   
- 
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "bio"))
 async def bio_handler(event):
 	me = await client.get_me()
@@ -486,6 +483,7 @@ async def bio_handler(event):
 # little message that the bot was started
 async def startup():
 	await client.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
+	await bot.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
 	
 
 
@@ -496,7 +494,7 @@ async def shutdown_handler(event):
 	logger.error("SHUT DOWN")
 	CMD = CMD_PREFIX[1:]
 	await event.edit(f"**Restarted. `{CMD}ping` me or `{CMD}alive` to check if I am online**")
-	await client.send_message(LOG, "**[INFO]**\n\nShutdown was successfully initiated.")
+	await bot.send_message(LOG, "**[INFO]**\n\nShutdown was successfully initiated.")
 	# just so everything is saved - it should be anyway, but just to be sure
 	database.save()
 	# this stops the whole loop

@@ -1,7 +1,7 @@
 import asyncio
 from telethon.errors import rpcbaseerrors
 from telethon import events
-from __main__ import client
+from __main__ import client, bot
 from constants import CMD_PREFIX, LOG, BOTLOG
 
 
@@ -36,7 +36,7 @@ async def fastpurger(purg):
     )
 
     if BOTLOG:
-        await purg.client.send_message(
+        await bot.send_message(
             LOG,
             "**[PURGE ACTION]** \
             \n\nPurge of " + str(count) + " messages done successfully.")
@@ -83,11 +83,11 @@ async def delete_it(delme):
             await msg_src.delete()
             await delme.delete()
             if BOTLOG:
-                await delme.client.send_message(
+                await bot.send_message(
                     LOG, "Deletion of message was successful")
         except rpcbaseerrors.BadRequestError:
             if BOTLOG:
-                await delme.client.send_message(
+                await bot.send_message(
                     LOG, "**[PURGE ACTION]** \
                          \n\nWell, I can't delete a message")
 
@@ -107,7 +107,7 @@ async def editer(edit):
             break
         i = i + 1
     if BOTLOG:
-        await edit.client.send_message(LOG,
+        await bot.send_message(LOG,
                                        "**[PURGE ACTION]** \
                                         \n\nEdit query was executed successfully")
 
@@ -124,6 +124,6 @@ async def selfdestruct(destroy):
     await asyncio.sleep(counter)
     await smsg.delete()
     if BOTLOG:
-        await destroy.client.send_message(LOG,
-                                          "**[PURGE ACTION]** \
-                                            \n\nsd query done successfully")
+        await bot.send_message(LOG,
+                                    "**[PURGE ACTION]** \
+                                    \n\nsd query done successfully")

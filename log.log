@@ -4460,3 +4460,183 @@ Traceback (most recent call last):
   File "bot.py", line 437, in sme
     cou = a_me['country']
 KeyError: 'country'
+[ERROR/2020-06-27 13:22:50,555] asyncio: Task exception was never retrieved
+future: <Task finished coro=<startup() done, defined at bot.py:487> exception=ValueError('Could not find the input entity for <telethon.tl.types.PeerChannel object at 0x00000140B386BF48>. Please read https://docs.telethon.dev/en/latest/concepts/entities.html to find out more details.')>
+Traceback (most recent call last):
+  File "bot.py", line 488, in startup
+    await bot.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\messages.py", line 697, in send_message
+    entity = await self.get_input_entity(entity)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 445, in get_input_entity
+    .format(peer)
+ValueError: Could not find the input entity for <telethon.tl.types.PeerChannel object at 0x00000140B386BF48>. Please read https://docs.telethon.dev/en/latest/concepts/entities.html to find out more details.
+[ERROR/2020-06-27 13:25:24,782] asyncio: Task exception was never retrieved
+future: <Task finished coro=<startup() done, defined at bot.py:487> exception=ValueError('Could not find the input entity for <telethon.tl.types.PeerChannel object at 0x0000027CEF653E88>. Please read https://docs.telethon.dev/en/latest/concepts/entities.html to find out more details.')>
+Traceback (most recent call last):
+  File "bot.py", line 489, in startup
+    await bot.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\messages.py", line 697, in send_message
+    entity = await self.get_input_entity(entity)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 445, in get_input_entity
+    .format(peer)
+ValueError: Could not find the input entity for <telethon.tl.types.PeerChannel object at 0x0000027CEF653E88>. Please read https://docs.telethon.dev/en/latest/concepts/entities.html to find out more details.
+[ERROR/2020-06-27 13:31:00,778] telethon.client.updates: Unhandled exception on delete_it
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "D:\Github\meaniispotify\plugins\chat\purge.py", line 86, in delete_it
+    await delme.bot.send_message(
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\events\newmessage.py", line 231, in __getattr__
+    return getattr(self.message, item)
+AttributeError: 'Message' object has no attribute 'bot'
+[ERROR/2020-06-27 13:31:07,662] telethon.client.updates: Unhandled exception on delete_it
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "D:\Github\meaniispotify\plugins\chat\purge.py", line 86, in delete_it
+    await delme.bot.send_message(
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\events\newmessage.py", line 231, in __getattr__
+    return getattr(self.message, item)
+AttributeError: 'Message' object has no attribute 'bot'
+[ERROR/2020-06-27 13:46:55,692] asyncio: Task exception was never retrieved
+future: <Task finished coro=<work() done, defined at bot.py:125> exception=BotMethodInvalidError('The API access for bot users is restricted. The method you tried to invoke cannot be executed as a bot (caused by UpdateProfileRequest)')>
+Traceback (most recent call last):
+  File "bot.py", line 255, in work
+    await bot(UpdateProfileRequest(about=new_bio))
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 30, in __call__
+    return await self._call(self._sender, request, ordered=ordered)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 77, in _call
+    result = await future
+telethon.errors.rpcerrorlist.BotMethodInvalidError: The API access for bot users is restricted. The method you tried to invoke cannot be executed as a bot (caused by UpdateProfileRequest)
+[ERROR/2020-06-27 13:47:08,846] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:14,012] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:19,680] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:22,244] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:30,181] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:36,417] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:38,328] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:47:46,271] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:48:07,054] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:48:24,194] __main__: SHUT DOWN
+[ERROR/2020-06-27 13:48:41,866] asyncio: Task exception was never retrieved
+future: <Task finished coro=<work() done, defined at bot.py:125> exception=BotMethodInvalidError('The API access for bot users is restricted. The method you tried to invoke cannot be executed as a bot (caused by UpdateProfileRequest)')>
+Traceback (most recent call last):
+  File "bot.py", line 255, in work
+    await bot(UpdateProfileRequest(about=new_bio))
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 30, in __call__
+    return await self._call(self._sender, request, ordered=ordered)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 77, in _call
+    result = await future
+telethon.errors.rpcerrorlist.BotMethodInvalidError: The API access for bot users is restricted. The method you tried to invoke cannot be executed as a bot (caused by UpdateProfileRequest)
+[ERROR/2020-06-27 13:48:51,095] telethon.client.updates: Unhandled exception on bio_handler
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 483, in bio_handler
+    lrt = readable_time.get_readable_time((time.time() - work.lrt))
+AttributeError: 'function' object has no attribute 'lrt'
+[ERROR/2020-06-27 13:54:21,736] asyncio: Task exception was never retrieved
+future: <Task finished coro=<work() done, defined at bot.py:125> exception=ConnectionError('Cannot send requests while disconnected')>
+Traceback (most recent call last):
+  File "bot.py", line 217, in work
+    full = await client(GetFullUserRequest('me'))
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 30, in __call__
+    return await self._call(self._sender, request, ordered=ordered)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 56, in _call
+    future = sender.send(request, ordered=ordered)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\network\mtprotosender.py", line 170, in send
+    raise ConnectionError('Cannot send requests while disconnected')
+ConnectionError: Cannot send requests while disconnected
+[ERROR/2020-06-27 13:54:31,362] telethon.client.updates: Unhandled exception on bot_start
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 329, in bot_start
+    await bot.send_message("ok")
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\messages.py", line 697, in send_message
+    entity = await self.get_input_entity(entity)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 412, in get_input_entity
+    await self._get_entity_from_string(peer))
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 546, in _get_entity_from_string
+    'Cannot find any entity corresponding to "{}"'.format(string)
+ValueError: Cannot find any entity corresponding to "ok"
+[ERROR/2020-06-27 13:54:38,299] telethon.client.updates: Unhandled exception on bot_start
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 329, in bot_start
+    await bot.send_message("ok")
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\messages.py", line 697, in send_message
+    entity = await self.get_input_entity(entity)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 412, in get_input_entity
+    await self._get_entity_from_string(peer))
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 546, in _get_entity_from_string
+    'Cannot find any entity corresponding to "{}"'.format(string)
+ValueError: Cannot find any entity corresponding to "ok"
+[ERROR/2020-06-27 13:54:46,666] telethon.client.updates: Unhandled exception on bot_start
+Traceback (most recent call last):
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\updates.py", line 435, in _dispatch_update
+    await callback(event)
+  File "bot.py", line 329, in bot_start
+    await bot.send_message("ok")
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\messages.py", line 697, in send_message
+    entity = await self.get_input_entity(entity)
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 412, in get_input_entity
+    await self._get_entity_from_string(peer))
+  File "C:\Users\hexca\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.7_qbz5n2kfra8p0\LocalCache\local-packages\Python37\site-packages\telethon\client\users.py", line 546, in _get_entity_from_string
+    'Cannot find any entity corresponding to "{}"'.format(string)
+ValueError: Cannot find any entity corresponding to "ok"

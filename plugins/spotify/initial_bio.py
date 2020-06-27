@@ -3,7 +3,7 @@ from telethon.tl.functions.account import (UpdateProfileRequest,
                                            UpdateUsernameRequest)
 
 from telethon import events
-from __main__ import client
+from __main__ import client, bot
 from constants import CMD_PREFIX, LOG, INITIAL_BIO, BOTLOG
 
 
@@ -20,7 +20,7 @@ async def set_biograph(setbio):
         await setbio.edit(f"Successfully set your bio. \
                             \n**Bio**: {INITIAL_BIO}")
     if BOTLOG:
-        await setbio.client.send_message(
+        await bot.send_message(
             LOG,
             "**[INITIAL BIO]** \
             \n\nSuccessfully set your bio.")

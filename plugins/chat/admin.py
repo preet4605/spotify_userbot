@@ -15,7 +15,7 @@ from telethon.tl.functions.messages import ReportSpamRequest
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.functions.channels import LeaveChannelRequest
 from telethon import events
-from __main__ import client
+from __main__ import client, bot
 from constants import CMD_PREFIX , LOG, BOTLOG
 
 # =================== CONSTANT ===================
@@ -110,7 +110,7 @@ async def promote(promt):
 
     # Announce to the logging group if we have promoted successfully
     if LOG:
-        await promt.client.send_message(
+        await bot.send_message(
             LOG, "**[PROMOTE ADMIN]**\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {promt.chat.title}(`{promt.chat_id}`)")
@@ -157,7 +157,7 @@ async def demote(dmod):
 
     # Announce to the logging group if we have demoted successfully
     if BOTLOG:
-        await dmod.client.send_message(
+        await bot.send_message(
             LOG, "**[DEMOTED ADMIN]**\n\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {dmod.chat.title}(`{dmod.chat_id}`)")
@@ -207,7 +207,7 @@ async def ban(bon):
 
     # Announce to the logging group if we have demoted successfully
     if BOTLOG:
-        await bon.client.send_message(
+        await bot.send_message(
             LOG, "**[BAN]**\n\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n\n"
             f"CHAT: {bon.chat.title}(`{bon.chat_id}`)")
@@ -240,7 +240,7 @@ async def nothanos(unbon):
         await unbon.edit("```Unbanned Successfully```")
 
         if BOTLOG:
-            await unbon.client.send_message(
+            await bot.send_message(
                 LOG, "**[UNBAN]**\n\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {unbon.chat.title}(`{unbon.chat_id}`)")
@@ -364,7 +364,7 @@ async def pin(msg):
     user = await get_user_from_id(msg.from_id, msg)
 
     if BOTLOG:
-        await msg.client.send_message(
+        await bot.send_message(
             LOG, "**[PIN]**\n\n"
             f"ADMIN: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {msg.chat.title}(`{msg.chat_id}`)\n"
@@ -404,7 +404,7 @@ async def kick(usr):
     await usr.edit(kmsg.format(user.first_name, user.id))
 
     if BOTLOG:
-        await usr.client.send_message(
+        await bot.send_message(
             LOG, "#KICK\n"
             f"USER: [{user.first_name}](tg://user?id={user.id})\n"
             f"CHAT: {usr.chat.title}(`{usr.chat_id}`)\n")
@@ -448,8 +448,8 @@ async def spider(spdr):
 
         # Announce to logging group
         if BOTLOG:
-            await spdr.client.send_message(
-                LOG, "#MUTE\n"
+            await bot.send_message(
+                LOG, "**[MUTE]**\n"
                 f"USER: [{user.first_name}](tg://user?id={user.id})\n"
                 f"CHAT: {spdr.chat.title}(`{spdr.chat_id}`)")
     except UserIdInvalidError:
@@ -502,8 +502,8 @@ async def unmoot(unmot):
         await unmot.edit("`Uh oh my unmute logic broke!`")
         return
     if BOTLOG:
-        await unmot.client.send_message(
-        LOG, "#UNMUTE\n"
+        await bot.send_message(
+        LOG, "**[UNMUTE]**\n"
         f"USER: [{user.first_name}](tg://user?id={user.id})\n"
         f"CHAT: {unmot.chat.title}(`{unmot.chat_id}`)")
 
@@ -527,9 +527,9 @@ async def blockpm(block):
     await block.edit("`Blocked.`")
 
     if BOTLOG:
-        await block.client.send_message(
+        await bot.send_message(
             LOG,
-            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+            "**[BLOCKED]**\n\n" + "User: " + f"[{name0}](tg://user?id={uid})",
         )
 
 

@@ -5,6 +5,7 @@ API_HASH = " "
 SESSION_KEY = " "
 INITIAL_TOKEN = " "
 INITIAL_BIO = "Existence is painfull! Zoldyck Family™♥️//Spam here @MedevilofMarvel"
+BOT_TOKEN = ''
 BOTLOG = True 
 LOG = -100
 # the escaping is necessary since we are testing against a regex pattern with it.
