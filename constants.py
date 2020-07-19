@@ -19,6 +19,8 @@ BIOS = [KEY + ' Now Playing Spotify: {interpret} - {title} {progress}/{duration}
         KEY + ' : {interpret} - {title}',
         KEY + ' Now Playing Spotify: {title}',
         KEY + ' : {title}']
+
+OPEN_WEATHER_MAP_APPID = ' '
 # Mind that some characters (e.g. emojis) count more in telegram more characters then in python. If you receive an
 # AboutTooLongError and get redirected here, you need to increase the offset. Check the special characters you either
 # have put in the KEY or in one of the BIOS with an official Telegram App and see how many characters they actually

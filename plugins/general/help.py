@@ -22,6 +22,9 @@ async def help(event):
 **General commands**
 `{CMD}info`: Get Telegram Profile Picture and other information.
 `{CMD}ud`: Urban Dictionary.
+`{CMD}weather <Location>`: Get weather data using OpenWeatherMap (text)
+`{CMD}wttr <Location>`: Get weather data using OpenWeatherMap (img)
+`{CMD}abot`: get info about bot.
 
 **Chats commands**
 `{CMD}block`: Blocks the person from PMing you.

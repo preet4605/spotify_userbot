@@ -2,7 +2,7 @@ import asyncio
 import time
 import readable_time
 from datetime import datetime
-from constants import API_HASH, API_ID, SESSION_KEY, CLIENT_ID, CLIENT_SECRET, LOG, CMD_PREFIX, BIOS, LIMIT, BOT_TOKEN
+from constants import API_HASH, API_ID, SESSION_KEY, CLIENT_ID, CLIENT_SECRET, LOG, CONSOLE_LOGGER_VERBOSE,  CMD_PREFIX, BIOS, LIMIT, BOT_TOKEN
 import json
 import logging
 import requests
@@ -10,6 +10,7 @@ from importlib import import_module
 import os
 from telethon import events
 from telethon.tl import functions
+from logging import DEBUG, INFO, basicConfig, getLogger
 from telethon import TelegramClient, events
 from telethon.errors import FloodWaitError, AboutTooLongError
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -22,6 +23,15 @@ system_version, app_version = version, version
 
 StartTime = time.time()
 
+if CONSOLE_LOGGER_VERBOSE:
+    basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        level=DEBUG,
+    )
+else:
+    basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                level=INFO)
+LOGS = getLogger(__name__)
 
 
 bot = TelegramClient('bot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
@@ -35,9 +45,6 @@ with TelegramClient(StringSession(SESSION_KEY), API_ID, API_HASH, device_model=d
 
 					logger = logging.getLogger(__name__)
 								
-
-
-
 
 def ms_converter(millis):
 	millis = int(millis)
@@ -306,7 +313,7 @@ async def work():
 
 # =========================== LOAD PLUGINS ============================================#     
 
-general = ('ud','info','help')
+general = ('ud','info','help','weather','about_bot')
 for plugin in general:
     import_module('plugins.general.{}'.format(plugin))
 
@@ -323,9 +330,10 @@ system = ('ping','speedtest')
 for plugin in system:
     import_module('plugins.system.{}'.format(plugin))
     
+#=================================GET_DEEZ_BY_SUNNY========================================================#
 
-@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "getsong"))
-async def get_song(event):
+@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "getdeez"))
+async def get_deez(event):
 	oauth = {
 			"Authorization": "Bearer " + database.return_token()}
 	r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=oauth)
@@ -335,7 +343,7 @@ async def get_song(event):
 		spolink = f"""{work.link}"""
 		spotify_link = spolink[31:]
 		chat = await event.client.get_entity("@spotify_to_mp3_bot")
-		done = await event.edit("`Downloading..`")
+		done = await event.edit("`𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙞𝙣𝙜...`")
 		async with event.client.conversation(chat) as conv:
 			try:
 				await conv.send_message("/download spotify:track:{}".format(spotify_link))
@@ -352,11 +360,47 @@ async def get_song(event):
 				if song.audio:
 					await done.delete()
 					await event.client.send_message(event.chat_id, file=song.audio)
-						
+				else:
+				    await event.edit("𝙎𝙤𝙣𝙜 𝙣𝙤𝙩 𝙛𝙤𝙪𝙣𝙙 𝙤𝙣 𝙙𝙚𝙚𝙯𝙚𝙧, 𝙩𝙧𝙮 `?getsong`")
+					
+			except Exception as e:
+				await event.reply(f"`RIP `: {str(e)}")
+			return
+
+@client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "getsong"))
+async def get_song(event):
+	oauth = {
+			"Authorization": "Bearer " + database.return_token()}
+	r = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers=oauth)
+	if r.status_code == 204:
+		spolink = await event.edit("\n**I'm not listening anything right now :)**")
+	else:
+		spolink = f"""{work.link}"""
+		chat = await event.client.get_entity("@songdl_bot")
+		done = await event.edit("`𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙𝙞𝙣𝙜...`")
+		async with event.client.conversation(chat) as conv:
+			try:
+				await conv.send_message("{}".format(spolink))
+				song = await conv.get_response()
+				response = conv.wait_event(
+					events.NewMessage(incoming=True, from_users=chat.id)
+				)
+				song = await response
+				await event.client.send_read_acknowledge(
+				entity=chat.id,
+				message=song,
+				clear_mentions=True
+			)
+				if song.audio:
+					await done.delete()
+					await event.client.send_message(event.chat_id, file=song.audio)
+				else:
+				    await event.edit("𝙎𝙤𝙣𝙜 𝙣𝙤𝙩 𝙛𝙤𝙪𝙣𝙙 𝙤𝙣 𝙅𝙄𝙊 𝙎𝙖𝙫𝙖𝙣, 𝙩𝙧𝙮 `?getdeez`")
 					
 			except Exception as e:
 				await event.reply(f"`RIP `: {str(e)}")
 			return 
+ 
 
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "song"))
 async def link_handler(event):
@@ -475,14 +519,16 @@ async def bio_handler(event):
 		bio_mode = "`Initial`"
 	else:
 		bio_mode = "`Spotify`"
-		lrt = readable_time.get_readable_time((time.time() - work.lrt))
-		bio_s += f"\n**Last refresh:** {lrt} ago"
+		if work.lrt:
+			lrt = readable_time.get_readable_time((time.time() - work.lrt))
+			bio_s += f"\n**Last refresh:** {lrt} ago"
+		else:
+			bio_s += "\n**Last refresh:** **[ERROR] failed to get last refresh rate.**"
 		bio_s += f"\n**Currently in {bio_mode} mode.**"
 	await event.edit(bio_s)
 
 # little message that the bot was started
 async def startup():
-	await client.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
 	await bot.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
 	
 
