@@ -10,9 +10,9 @@ async def repo(event):
 **Repositorie:** [spotify_userbot](https://github.com/anilchauhanxda/spotify_userbot)
 
 **Other info:**
-[Poolitzer](https://t.me/poolitzer) is the one who created the main bot,  and other plugins are done by [meanii](https://t.me/meanii) & [Sunny](https://t.me/medeviloddxd).
+[Poolitzer](https://t.me/poolitzer) is the one who created the main bot,  and other plugins are done by [meanii](https://t.me/meanii) & [Sunny](https://t.me/medevilofdxd).
 I thank [Poolitzer](https://t.me/poolitzer) for making such a great bot :)
-for more info see this (https://t.me/meanii/20).
+for more info see [this](https://t.me/meanii/20).
 __Chats modules kanged from paperplane.__
 
 **Creadit:** 
