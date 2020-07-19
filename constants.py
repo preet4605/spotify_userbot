@@ -12,6 +12,8 @@ LOG = -100
 CMD_PREFIX = '\?' 
 # The key which is used to determine if the current bio was generated from the bot ot from the user. This means:
 # NEVER use whatever you put here in your original bio. NEVER. Don't do it!
+CONSOLE_LOGGER_VERBOSE = False
+
 KEY = '🎶'
 # The bios MUST include the key. The bot will go though those and check if they are beneath telegrams character limit.
 BIOS = [KEY + ' Now Playing Spotify: {interpret} - {title} {progress}/{duration}',
