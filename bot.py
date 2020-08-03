@@ -313,7 +313,7 @@ async def work():
 
 # =========================== LOAD PLUGINS ============================================#     
 
-general = ('ud','info','help','weather','about_bot')
+general = ('ud','info','help','weather','about_bot','screencapture')
 for plugin in general:
     import_module('plugins.general.{}'.format(plugin))
 
