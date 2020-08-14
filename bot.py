@@ -323,7 +323,10 @@ def find_plug(path_='./plugins/'):
         if '__pycache__' in ae:
             return False
         else:
-            return True
+            if ae.endswith('.py'):
+                return True
+            else:
+                return False
     a = list(walk(path_))
     ok = []
     for g in a:
@@ -335,7 +338,7 @@ def find_plug(path_='./plugins/'):
             gl = gl+h
             ok.append(gl)
             gl = ga
-    return list(filter(rr,list(map(asee,ok))))
+    return list(map(asee,list(filter(rr,ok))))
 
 for plugin in find_plug():
      import_module(plugin)
