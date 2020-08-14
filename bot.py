@@ -8,6 +8,7 @@ import logging
 import requests
 from importlib import import_module
 import os
+from os import walk
 from telethon import events
 from telethon.tl import functions
 from logging import DEBUG, INFO, basicConfig, getLogger
@@ -313,23 +314,33 @@ async def work():
 
 # =========================== LOAD PLUGINS ============================================#     
 
-general = ('ud','info','help','weather','about_bot')
-for plugin in general:
-    import_module('plugins.general.{}'.format(plugin))
+def find_plug(path_='./plugins/'):
+    def asee(ae):
+        ae = ae.split('.')
+        ae.pop(len(ae)-1)
+        return '.'.join(ae)
+    def rr(ae):
+        if '__pycache__' in ae:
+            return False
+        else:
+            return True
+    a = list(walk(path_))
+    ok = []
+    for g in a:
+        ga = g[0].replace('./','').replace('/','.')
+        if not ga.endswith('.'):
+            ga += '.'
+        gl = ga
+        for h in g[2]:
+            gl = gl+h
+            ok.append(gl)
+            gl = ga
+    return list(filter(rr,list(map(asee,ok))))
+
+for plugin in find_plug():
+     import_module(plugin)
 
 
-spotify = ('lyrics','initial_bio')
-for plugin in spotify:
-    import_module('plugins.spotify.{}'.format(plugin))
-
-chat = ('admin','purge','get_id')
-for plugin in chat:
-    import_module('plugins.chat.{}'.format(plugin))
-    
-system = ('ping','speedtest')
-for plugin in system:
-    import_module('plugins.system.{}'.format(plugin))
-    
 #=================================GET_DEEZ_BY_SUNNY========================================================#
 
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "getdeez"))

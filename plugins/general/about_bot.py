@@ -15,7 +15,7 @@ I thank [Poolitzer](https://t.me/poolitzer) for making such a great bot :)
 for more info see [this](https://t.me/meanii/20).
 __Chats modules kanged from paperplane.__
 
-**Creadit:** 
+**Credit:** 
 [Poolitzer](https://t.me/poolitzer)  (for creating this userbot.)
 [Sunny](https://t.me/medevilofxd) (for ?getsong feature)
     """

@@ -5,6 +5,7 @@ API_HASH = " "
 SESSION_KEY = " "
 INITIAL_TOKEN = " "
 INITIAL_BIO = "Existence is painfull! Zoldyck Family™♥️//Spam here @MedevilofMarvel"
+SCREENSHOT_LAYER_ACCESS_KEY = ""
 BOT_TOKEN = ''
 BOTLOG = True 
 LOG = -100
