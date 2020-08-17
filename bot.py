@@ -424,7 +424,7 @@ async def link_handler(event):
 		spolink = "\n**I'm not listening anything right now :)**"
 	else:
 		spolink = f"""
-🎶listening: [{work.title}]({work.link}) - {work.interpret}
+🎶 Vibing ; [{work.title}]({work.link}) - {work.interpret}
  """
 	await event.edit(spolink,link_preview=True)
 
@@ -544,8 +544,7 @@ async def bio_handler(event):
 async def startup():
 	await bot.send_message(LOG, "**[INFO]**\n\nSpotify was successfully started.")
 	
-
-
+	
 
 # shutdown handler in case the bot goes nuts (again)
 @client.on(events.NewMessage(outgoing=True, pattern=CMD_PREFIX + "restart"))
