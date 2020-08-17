@@ -1,10 +1,10 @@
 CLIENT_ID = " "
 CLIENT_SECRET = " "
-API_ID = 01345
+API_ID = 
 API_HASH = " "
 SESSION_KEY = " "
 INITIAL_TOKEN = " "
-INITIAL_BIO = "Existence is painfull! Zoldyck Family™♥️//Spam here @MedevilofMarvel"
+INITIAL_BIO = " "
 SCREENSHOT_LAYER_ACCESS_KEY = ""
 BOT_TOKEN = ''
 BOTLOG = True 
@@ -17,10 +17,10 @@ CONSOLE_LOGGER_VERBOSE = False
 
 KEY = '🎶'
 # The bios MUST include the key. The bot will go though those and check if they are beneath telegrams character limit.
-BIOS = [KEY + ' Now Playing Spotify: {interpret} - {title} {progress}/{duration}',
-        KEY + ' Now Playing Spotify: {interpret} - {title}',
+BIOS = [KEY + ' Vibing ; {interpret} - {title} {progress}/{duration}',
+        KEY + ' Vibing : {interpret} - {title}',
         KEY + ' : {interpret} - {title}',
-        KEY + ' Now Playing Spotify: {title}',
+        KEY + ' Vibing : {title}',
         KEY + ' : {title}']
 
 OPEN_WEATHER_MAP_APPID = ' '
