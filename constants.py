@@ -10,7 +10,7 @@ BOT_TOKEN = ''
 BOTLOG = True 
 LOG = -100
 # the escaping is necessary since we are testing against a regex pattern with it.
-CMD_PREFIX = '\?' 
+CMD_PREFIX = '\.' 
 # The key which is used to determine if the current bio was generated from the bot ot from the user. This means:
 # NEVER use whatever you put here in your original bio. NEVER. Don't do it!
 CONSOLE_LOGGER_VERBOSE = False
