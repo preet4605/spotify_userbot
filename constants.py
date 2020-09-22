@@ -8,7 +8,7 @@ INITIAL_BIO = " "
 SCREENSHOT_LAYER_ACCESS_KEY = ""
 BOT_TOKEN = ''
 BOTLOG = True 
-LOG = https://t.me/Userbot3
+LOG = -1001270871080
 
 
 
