@@ -1,14 +1,18 @@
-CLIENT_ID = " "
-CLIENT_SECRET = " "
-API_ID = 
-API_HASH = " "
+CLIENT_ID = "1d23f55f0b11488db101eac8f1fe4d42"
+CLIENT_SECRET = "e3bad89056014f269b20b1b10436f5f6"
+API_ID = 1994307
+API_HASH = "860d356de4da4e6fcfa0fd3cf2abdf46"
 SESSION_KEY = " "
-INITIAL_TOKEN = " "
+INITIAL_TOKEN = "AQBfuqeM3pjTAH7PilHequhZnZoCCNcijgUsUZiw7tMLwU9VAhbeBoa6MACh557SWPYykIxW3R3udUiay8W0G1OX_qhmwOXiAvEMFd614GaOjsp3wYIVxWQMdy3GM3N_gMN2J0s5QHYFwsQYZif3tWbH_rnWM-hxHLyA98PwU_J1m-vAKZbPYcgm3tf7QbGl0n8xRHUUnJqtVN2jJsb2MqxoxS1Y6YLS9t0QRIC3SU1gzs_GnFcXvUo9UhnT-0hnNFzpcw-4fTTC4AkjI9cmdLtosN3D1u514a8D70qyhM7tVatY3PUZqhTk2IhUQysvg9o_GYewyAec1ynpSNRZnYXiLvoxaoOF2ylL5eGhk0lX3DDD-mRGi7w7LZ_IhrghjV1R-4dskd3Tq-_mQezE3grYSjZdnLd3ekdovC_UF2lioAMd1O1JJAyf"
 INITIAL_BIO = " "
 SCREENSHOT_LAYER_ACCESS_KEY = ""
 BOT_TOKEN = ''
 BOTLOG = True 
-LOG = -100
+LOG = https://t.me/Userbot3
+
+
+
+
 # the escaping is necessary since we are testing against a regex pattern with it.
 CMD_PREFIX = '\.' 
 # The key which is used to determine if the current bio was generated from the bot ot from the user. This means:
